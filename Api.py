@@ -1,4 +1,4 @@
-from flask import Flask, send_file, request
+from flask import Flask, request
 from flask_cors import CORS
 import json
 
@@ -29,8 +29,6 @@ def submit_job_route():
     dat = data['dat']
 
 
-
-
     job_instance = db('jobs')
   
     job_rows = job_instance.select(condition=f"WHERE jobtitle='{jobtitle}'")
@@ -39,7 +37,7 @@ def submit_job_route():
     if len(job_rows):
         
         print(job_rows[0])
-       # return(job_rows) #Add new
+
     else:
       
        job_instance.insert("jobtitle, company, locations, about, description, requirements, typ, industry, salary, dat ", f"'{jobtitle}', '{company}', '{locations}', '{about}', '{description}', '{requirements}', '{typ}', '{industry}', '{salary}', '{dat}'")
@@ -80,34 +78,16 @@ def get_job_route():
     }
 
     return jobs_dict
-
-
-
-
-
-
- 
-  #job_id = None #new add
- #job_id = job_rows[0][0]
-        # 
- 
-  # company_instance = db('company') #new add
-
- 
-  #return f'Submission from {company_id}'
-
-# company_id = company_instance.insert("company_", job_id", f"'{json.dumps(cart)}', {job_id}")
- # job_id = jobs_instance.insert("jobtitle, company", f"'{jobtitle}', '{company}'")
-
-
-
- #"name": row[1],
- #           "email": row[2],
- #           "jobtittle":row[3]"
- #           "companyname":row[3]
-  #          "location": row[2],
-  #          "aboutcompany": row[3],
-   #         "desc": row[4]
-   #         "Requirements":[]
-   #         "type"
-    #        "in"
+##CREATE TABLE jobs (
+	##id SERIAL PRIMARY KEY,
+	##jobtitle TEXT NOT NULL,
+	##company TEXT NOT NULL,
+	##locations TEXT NOT NULL,
+	##about Text NOT NULL,
+	##description TEXT,
+	##requirements TEXT NOT NULL,
+	##typ TEXT NOT NULL,
+	##industry TEXT NOT NULL,
+	##salary DOUBLE PRECISION NOT NULL,
+	##dat INT NOT NULL
+	##);

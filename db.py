@@ -42,20 +42,4 @@ class db:
         conn.close()
 
         return rows  
-
- # print(sql)
-
-   # conn.commit()
-
-# database="job listing Api",
- #   host="localhost",
-  #  port="5432",
-   # user="postgres",
-   # password="5432"
-
-
-   #database=os.getenv('DB_NAME'),
-   # host=os.getenv('DB_HOST'),
-    #port=os.getenv('DB_POST'),
-    #user=os.getenv('DB_USER'),
-    #password=os.getenv('DB_PASS')
+    

@@ -2,7 +2,7 @@ import os
 from psycopg2 import pool
 
 conn_pool = pool.SimpleConnectionPool(
-    1, 40000,
+    1, 1000000,
     database="job listing Api",
     host="localhost",
     port="5432",
@@ -20,9 +20,9 @@ class db:
         cursor = conn.cursor()
         
         sql = f"INSERT INTO {self.table} ({columns}) VALUES ({values})"
-        
+       
         cursor.execute(sql)
-        
+
         conn.commit()
         
         cursor.close()

@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_cors import CORS
 import json
 from datetime import datetime
+#from slugify import slugify
 
 import config
 from db import db
@@ -17,7 +18,8 @@ def main():
 @app.route('/submit_job', methods=["POST"])
 def submit_job_route():
     data = request.form
-
+    
+    slug =  data['slug']
     jobtitle=  data['jobtitle']
     company=  data['company']
     about=  data['about']
@@ -27,8 +29,11 @@ def submit_job_route():
     location = data['location']
     industry = data['industry']
     salary =  data['salary']
-    slug =  data['slug']
-    #date= data['date']
+   
+    #jobtitle = data['jobtitle']
+    # Generate a unique slug using the job title
+   # slug = slugify(jobtitle)
+
     
     #date_obj = datetime.strptime(date, '%a, %d %b %Y %H:%M:%S %Z')
     #formatted_date = date_obj.strftime('%Y-%m-%d')
@@ -46,9 +51,9 @@ def submit_job_route():
 
     else:
       
-       job_instance.insert("jobtitle, company, about, description, requirements, jobtype, location, industry, salary, slug", f"'{jobtitle}', '{company}', '{about}','{description}','{requirements}','{jobtype}','{location}', '{industry}','{salary}','{slug}'")
+       job_instance.insert("slug, jobtitle, company, about, description, requirements, jobtype, location, industry, salary", f"'{slug}', '{jobtitle}', '{company}', '{about}', '{description}', '{requirements}', '{jobtype}', '{location}', '{industry}', '{salary}'")
        
-    return f"{jobtitle} job added from {company}"
+    return f"{jobtitle} job added from {company} {company}"
 
 
 
@@ -64,16 +69,16 @@ def get_job_route():
     for row in job_rows:
         tmp_job = {
             "id": row[0],
-            "jobtitle":row[1],
-            "company":row[2],
-            "about":row[3],
-            "description":row[4],
-            "requirements":row[5],
-            "jobtype":row[6],
-            "location":row[7],
-            "industry":row[8],
-            "salary":row[9],
-            "slug":row[10]
+            "slug":row[1],
+            "jobtitle":row[2],
+            "company":row[3],
+            "about":row[4],
+            "description":row[5],
+            "requirements":row[6],
+            "jobtype":row[7],
+            "location":row[8],
+            "industry":row[9],
+            "salary":row[10]
         }
         
         tmp_jobs.append(tmp_job)
@@ -85,7 +90,7 @@ def get_job_route():
     return jobs_dict
 
 @app.route('/get_job/<job_slug>', methods=["GET"])
-def get_info_route(job_slug):
+def job_slug_route(job_slug):
     job_instance = db('jobs')
 
     job_rows = job_instance.select(condition=f"WHERE slug='{job_slug}'")
@@ -93,20 +98,43 @@ def get_info_route(job_slug):
     if len(job_rows):
         row = job_rows[0]
 
-        tmp_prod = {
+        tmp_job = {
             "id": row[0],
-            "jobtitle":row[1],
-            "company":row[2],
-            "about":row[3],
-            "description":row[4],
-            "requirements":row[5],
-            "jobtype":row[6],
-            "location":row[7],
-            "industry":row[8],
-            "salary":row[9],
-            "slug":row[10]
+            "slug":row[1],
+            "jobtitle":row[2],
+            "company":row[3],
+            "about":row[4],
+            "description":row[5],
+            "requirements":row[6],
+            "jobtype":row[7],
+            "location":row[8],
+            "industry":row[9],
+            "salary":row[10]  
         }
 
-        return tmp_prod
+        return tmp_job
     else:
         return {}
+
+@app.route('/suscribe_job', methods=["POST"])
+def suscribe_job_route():
+    data = request.form
+    
+    emailaddress =  data['emailaddresss']
+
+    
+    email_instance = db('suscribe')
+  
+    rows = email_instance.select()
+   
+    
+    if len(rows):
+
+        
+        print(rows[0])
+
+    else:
+      
+       job_instance.insert("emailaddress", f"'{emailaddress}'")
+       
+    return f"You just suscribed by {emailaddress}"

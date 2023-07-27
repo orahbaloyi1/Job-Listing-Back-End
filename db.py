@@ -2,7 +2,7 @@ import os
 from psycopg2 import pool
 
 conn_pool = pool.SimpleConnectionPool (
-    1, 10000000000,
+    1, 1000000,
     database=os.getenv('DB_NAME'),
     host=os.getenv('DB_HOST'),
     port=os.getenv('DB_POST'),

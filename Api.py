@@ -1,8 +1,5 @@
 from flask import Flask, request
 from flask_cors import CORS
-import json
-from datetime import datetime
-#from slugify import slugify
 
 import config
 from db import db
@@ -30,14 +27,6 @@ def submit_job_route():
     industry = data['industry']
     salary =  data['salary']
    
-    #jobtitle = data['jobtitle']
-    # Generate a unique slug using the job title
-   # slug = slugify(jobtitle)
-
-    
-    #date_obj = datetime.strptime(date, '%a, %d %b %Y %H:%M:%S %Z')
-    #formatted_date = date_obj.strftime('%Y-%m-%d')
-    #date = formatted_date
     
     job_instance = db('jobs')
   
@@ -53,16 +42,16 @@ def submit_job_route():
       
        job_instance.insert("slug, jobtitle, company, about, description, requirements, jobtype, location, industry, salary", f"'{slug}', '{jobtitle}', '{company}', '{about}', '{description}', '{requirements}', '{jobtype}', '{location}', '{industry}', '{salary}'")
        
-    return f"{jobtitle} job added from {company} {company}"
+    return f"{jobtitle} job added from {company} by {slug}"
 
 
 
 @app.route('/get_job', methods=["GET"])
 
 def get_job_route():
-    tmp_jobs = []
-
     job_instance = db('jobs')
+    
+    tmp_jobs = []
 
     job_rows = job_instance.select()
 
@@ -82,15 +71,14 @@ def get_job_route():
         }
         
         tmp_jobs.append(tmp_job)
-
+        
     jobs_dict ={
         "jobs": tmp_jobs
-    }
-
+        }
     return jobs_dict
 
 @app.route('/get_job/<job_slug>', methods=["GET"])
-def job_slug_route(job_slug):
+def get_info_route(job_slug):
     job_instance = db('jobs')
 
     job_rows = job_instance.select(condition=f"WHERE slug='{job_slug}'")
@@ -120,21 +108,15 @@ def job_slug_route(job_slug):
 def suscribe_job_route():
     data = request.form
     
-    emailaddress =  data['emailaddresss']
-
-    
+    emailaddress =  data['emailaddress']
     email_instance = db('suscribe')
-  
-    rows = email_instance.select()
-   
     
+    rows = email_instance.select(condition=f"WHERE emailaddress='{emailaddress}'")
+   
     if len(rows):
-
-        
         print(rows[0])
-
     else:
-      
-       job_instance.insert("emailaddress", f"'{emailaddress}'")
-       
-    return f"You just suscribed by {emailaddress}"
+        
+        email_instance.insert("emailaddress", f"'{emailaddress}'")
+        
+        return f"You just suscribed by {emailaddress}"

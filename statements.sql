@@ -1,6 +1,6 @@
 CREATE TABLE jobs (
 	id SERIAL PRIMARY KEY,
-	slug TEXT NOT NULL UNIQUE,
+	slug TEXT NOT NULL,
 	jobtitle TEXT NOT NULL,
 	company TEXT NOT NULL,
 	about TEXT NOT NULL,
@@ -11,3 +11,7 @@ CREATE TABLE jobs (
 	industry TEXT NOT NULL,
 	salary INT NULL
 	);
+	
+	CREATE TABLE userEmail (
+	id SERIAL PRIMARY KEY,
+	emailaddress TEXT NOT NULL);
